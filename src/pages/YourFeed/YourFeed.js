@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Feed from '../../components/Feed';
 import { withRouter } from 'react-router-dom';
 import { stringify } from 'query-string';
@@ -10,13 +10,17 @@ import Loading from '../../components/Loading';
 import ErrorMessage from '../../components/ErrorMessage';
 import FeedToggler from '../../components/FeedToggler';
 import Banner from '../../components/Banner';
-const GlobalFeed = ({ location, match }) => {
+import { CurrentUserContext } from '../../context/CurrentUser';
+const YourFeed = ({ location, match }) => {
+  const [currentUserState, setCurrentUserState] = useContext(
+    CurrentUserContext
+  );
   const { offset, currentPage } = getPaginator(location.search);
   const stringifiedParams = stringify({
     limit,
     offset,
   });
-  const apiUrl = `/articles?${stringifiedParams}`;
+  const apiUrl = `/articles/feed?${stringifiedParams}`;
   const currentUrl = match.url;
 
   const [{ response, loading, error }, doFetch] = useFetch(apiUrl);
@@ -53,4 +57,4 @@ const GlobalFeed = ({ location, match }) => {
   );
 };
 
-export default withRouter(GlobalFeed);
+export default withRouter(YourFeed);
